@@ -7,13 +7,6 @@ import { heroesFetching, heroesFetched, heroesFetchingError, heroDeleted } from 
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
-// Задача для этого компонента:
-// При клике на "крестик" идет удаление персонажа из общего состояния
-// Усложненная задача:
-// Удаление идет и с json файла при помощи метода DELETE
-
-
-
 const HeroesList = () => {
 
     const filterHeroesSelector = createSelector(  // синтаксис createSelector он мемонизирует и не будет рендерить при тригере на изменеие стейта если сам стейт не изменился
@@ -33,6 +26,7 @@ const HeroesList = () => {
     //     activeFilter: state.filteres.activeFilter,
     //     heroes: state.heroes.heroes,
     // }))  // из за строго сравнения при сравнении объекта с объектом будет всегда не равен = как следствие перерендер во всех случаях
+
     const filteredHeroes = useSelector(filterHeroesSelector);
 
     // const filteredHeroes = useSelector(state => {
@@ -43,12 +37,14 @@ const HeroesList = () => {
     //         return state.heroes.heroes.filter(item => item.element === state.filteres.activeFilter)
     //     }
     // })
+
     const heroesLoadingStatus = useSelector(state => state.heroes.heroesLoadingStatus);
     const dispatch = useDispatch();
     const { request } = useHttp();
 
     useEffect(() => {
-        dispatch("HEROES_FETCHING"); // по умолчанию dispatch всегда принимает объект
+        dispatch("HEROES_FETCHING"); // по умолчанию dispatch всегда принимает объект //
+        //dispatch(heroesFetching());
         request("http://localhost:3001/heroes")
             .then(data => dispatch(heroesFetched(data)))
             .catch(() => dispatch(heroesFetchingError()))
@@ -62,8 +58,6 @@ const HeroesList = () => {
     }, [request]);
 
 
-
-
     if (heroesLoadingStatus === "loading") {
         return <Spinner />;
     } else if (heroesLoadingStatus === "error") {
@@ -74,7 +68,6 @@ const HeroesList = () => {
         if (arr.lenght === 0) {
             return <h5 className="text-center mt-5">Героев пока нет</h5>
         }
-
         return arr.map(({ id, ...props }) => {
             return <HeroesListItem
                 key={id}
@@ -84,10 +77,7 @@ const HeroesList = () => {
         })
     }
 
-
     const elements = renderHeroesList(filteredHeroes);
-
-
 
     return (
         <ul>
