@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useHttp } from '../../hooks/http.hook';
 import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { heroCreated, filtersFetching, filtersFetched, filtersFetchingError } from '../../actions';
+import { heroCreated } from '../../actions';
 
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
@@ -24,7 +24,7 @@ import { heroCreated, filtersFetching, filtersFetched, filtersFetchingError } fr
 
 const HeroesAddFormFormik = () => {
 
-    const { filters, filtersLoadingStatus } = useSelector(state => state)
+    const { filters, filtersLoadingStatus } = useSelector(state => state.filteres) // теперь обращаемся ко вложенным редьюсерам
 
 
     const [heroName, setHeroName] = useState('');

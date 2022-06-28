@@ -3,8 +3,8 @@ const initialState = {
     heroesLoadingStatus: 'idle',
     filters: [],
     filtersLoadingStatus: 'idle',
-    activeFilter: 'all',
-    filteredHeroes: [],
+    activeFilter: 'all'
+    // filteredHeroes: [],
 }
 
 const reducer = (state = initialState, action) => {
@@ -18,9 +18,9 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 heroes: action.payload,
-                filteredHeroes: state.activeFilter === 'all' ?
-                    action.payload :
-                    action.payload.filter(item => item.element === state.activeFilter),
+                // filteredHeroes: state.activeFilter === 'all' ? // переносим в компонент в useSelector что бы была возможность разделить селекторы
+                //     action.payload :
+                //     action.payload.filter(item => item.element === state.activeFilter),
                 heroesLoadingStatus: 'idle'
             }
         case 'HEROES_FETCHING_ERROR':
@@ -48,28 +48,28 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 activeFilter: action.payload,
-                filteredHeroes: action.payload === 'all' ?
-                    state.heroes :
-                    state.heroes.filter(item => item.element === action.payload)
+                // filteredHeroes: action.payload === 'all' ?
+                //     state.heroes :
+                //     state.heroes.filter(item => item.element === action.payload)
             }
 
         case 'HEROES_CREATED':
-            let newListItemAdd = [...state.heroes, action.payload] //добавил героя пришкдшего из action
+            //let newListItemAdd = [...state.heroes, action.payload] //добавил героя пришкдшего из action
             return {
                 ...state,
-                heroes: newListItemAdd,
-                filteredHeroes: state.activeFilter === 'all' ?
-                    newListItemAdd :
-                    newListItemAdd.filter(item => item.element === state.activeFilter)
+                heroes: [...state.heroes, action.payload]
+                // filteredHeroes: state.activeFilter === 'all' ?
+                //     newListItemAdd :
+                //     newListItemAdd.filter(item => item.element === state.activeFilter)
             }
         case 'HEROES_DELETED':
-            let newListItemLose = state.heroes.filter(item => item.id !== action.payload) // отфильтровали массив убрали эллемент по id
+            //let newListItemLose = state.heroes.filter(item => item.id !== action.payload) // отфильтровали массив убрали эллемент по id
             return {
                 ...state,
-                heroes: newListItemLose,
-                filteredHeroes: state.activeFilter === 'all' ?
-                    newListItemLose :
-                    newListItemLose.filter(item => item.element === state.activeFilter)
+                heroes: state.heroes.filter(item => item.id !== action.payload),
+                // filteredHeroes: state.activeFilter === 'all' ?
+                //     newListItemLose :
+                //     newListItemLose.filter(item => item.element === state.activeFilter)
             }
         default: return state
     }

@@ -18,7 +18,7 @@ import Spinner from '../spinner/Spinner';
 
 const HeroesFilters = () => {
 
-    const { filters, filtersLoadingStatus, activeFilter } = useSelector(state => state)
+    const { filters, filtersLoadingStatus, activeFilter } = useSelector(state => state.filteres)
 
     const { request } = useHttp();
 
@@ -41,7 +41,7 @@ const HeroesFilters = () => {
     }
 
     const renderFiltersList = (arr) => {
-        if (arr.length === 0) {
+        if (arr.lenght === 0) {
             return <h5 className="text-center mt-5">Фильтров нет</h5>
         }
 

@@ -1,7 +1,7 @@
 import { useHttp } from '../../hooks/http.hook';
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { createSelector } from 'reselect'
 
 import { heroesFetching, heroesFetched, heroesFetchingError, heroDeleted } from '../../actions';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
@@ -15,7 +15,35 @@ import Spinner from '../spinner/Spinner';
 
 
 const HeroesList = () => {
-    const { heroesLoadingStatus, filteredHeroes } = useSelector(state => state);
+
+    const filterHeroesSelector = createSelector(  // синтаксис createSelector он мемонизирует и не будет рендерить при тригере на изменеие стейта если сам стейт не изменился
+        (state) => state.filteres.activeFilter,
+        (state) => state.heroes.heroes,
+        (filter, heroes) => {
+            if (filter === 'all') {
+                console.log('render'); // рендерит при изменении глобального стейта (не смотря на одинаковые значения)
+                return heroes;
+            } else {
+                return heroes.filter(item => item.element === filter)
+            }
+        }
+    )
+
+    // const someState = useSelector(state => ({
+    //     activeFilter: state.filteres.activeFilter,
+    //     heroes: state.heroes.heroes,
+    // }))  // из за строго сравнения при сравнении объекта с объектом будет всегда не равен = как следствие перерендер во всех случаях
+    const filteredHeroes = useSelector(filterHeroesSelector);
+
+    // const filteredHeroes = useSelector(state => {
+    //     if (state.filteres.activeFilter === 'all') {
+    //         console.log('render'); // рендерит при изменении глобального стейта (не смотря на одинаковые значения)
+    //         return state.heroes.heroes;
+    //     } else {
+    //         return state.heroes.heroes.filter(item => item.element === state.filteres.activeFilter)
+    //     }
+    // })
+    const heroesLoadingStatus = useSelector(state => state.filteres.heroesLoadingStatus);
     const dispatch = useDispatch();
     const { request } = useHttp();
 
@@ -43,7 +71,7 @@ const HeroesList = () => {
     }
 
     const renderHeroesList = (arr) => {
-        if (arr.length === 0) {
+        if (arr.lenght === 0) {
             return <h5 className="text-center mt-5">Героев пока нет</h5>
         }
 
