@@ -1,0 +1,60 @@
+{
+  "heroes": [
+    {
+      "id": "06559177-9d14-477a-abfb-b2700e70d39f",
+      "name": "Володя",
+      "description": "ссать на Эрмитаж",
+      "element": "water"
+    },
+    {
+      "id": "d4cf3b24-da64-4724-99a0-8b052603c441",
+      "name": "Димон",
+      "description": "майнить",
+      "element": "fire"
+    },
+    {
+      "id": "9d4bd9f7-806b-4ea1-b1f5-a4d7e00a631a",
+      "name": "Дима",
+      "description": "мигрировать",
+      "element": "wind"
+    },
+    {
+      "id": "b0f7f047-c36e-45b6-b321-ed63c2dca058",
+      "name": "Саня ",
+      "description": "гадить ",
+      "element": "earth"
+    }
+  ],
+  "filters": [
+    {
+      "id": 1,
+      "element": "all",
+      "title": "Все",
+      "class": "btn-outline-dark"
+    },
+    {
+      "id": 2,
+      "element": "fire",
+      "title": "Огонь",
+      "class": "btn-danger"
+    },
+    {
+      "id": 3,
+      "element": "water",
+      "title": "Вода",
+      "class": "btn-primary"
+    },
+    {
+      "id": 4,
+      "element": "wind",
+      "title": "Ветер",
+      "class": "btn-success"
+    },
+    {
+      "id": 5,
+      "element": "earth",
+      "title": "Земля",
+      "class": "btn-secondary"
+    }
+  ]
+}
