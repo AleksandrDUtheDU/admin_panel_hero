@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import classNames from 'classnames';
 
 import { useHttp } from '../../hooks/http.hook';
-import { filtersFetching, filtersFetched, filtersFetchingError, activeFilterChanged } from '../../actions';
+import { filtersHeroes, filtersFetching, filtersFetched, filtersFetchingError, activeFilterChanged } from '../../actions';
 import Spinner from '../spinner/Spinner';
 
 
@@ -25,11 +25,11 @@ const HeroesFilters = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(filtersFetching());
-        request("http://localhost:3001/filters")
-            .then(data => dispatch(filtersFetched(data)))
-            .then(data => console.log(data.payload))
-            .catch(() => dispatch(filtersFetchingError()))
+        dispatch(filtersHeroes(request));
+        // request("http://localhost:3001/filters")
+        //     .then(data => dispatch(filtersFetched(data)))
+        //     .then(data => console.log(data.payload))
+        //     .catch(() => dispatch(filtersFetchingError()))
     }, []);
 
     console.log(filters)

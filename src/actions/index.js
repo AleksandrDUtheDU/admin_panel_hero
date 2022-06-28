@@ -1,3 +1,18 @@
+export const fethHeroes = (request) => (dispatch) => {
+    dispatch(heroesFetching());
+    request("http://localhost:3001/heroes")
+        .then(data => dispatch(heroesFetched(data)))
+        .catch(() => dispatch(heroesFetchingError()))
+}
+
+export const filtersHeroes = (request) => (dispatch) => {
+    dispatch(filtersFetching());
+    request("http://localhost:3001/filters")
+        .then(data => dispatch(filtersFetched(data)))
+        .catch(() => dispatch(filtersFetchingError()))
+}
+
+
 export const heroesFetching = () => {
     return {
         type: 'HEROES_FETCHING'
@@ -37,6 +52,15 @@ export const activeFilterChanged = (filter) => {
         payload: filter
     }
 }
+
+// export const activeFilterChanged = (filter) => (dispatch) => {
+//     setTimeout(() => {
+//         dispatch({
+//             type: 'FILTERS_ELEMENT_CHANGE',
+//             payload: filter
+//         })
+//     }, 1000)
+// } // будет фильтроваться с задержкой времени
 
 
 export const heroCreated = (hero) => { // добавление героя в стор

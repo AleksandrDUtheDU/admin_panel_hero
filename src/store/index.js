@@ -1,4 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
+import ReduxThunk from 'redux-thunk';
 //import reducer from '../reducers';
 import heroes from '../reducers/heroes';
 import filteres from '../reducers/filteres';
@@ -30,7 +31,7 @@ const enhanser = (createStore) => (...args) => { // мы как бы в ручн
 const store = createStore(
     combineReducers({ heroes, filteres }), // комбинируем 2 редьюсера
     compose(
-        applyMiddleware(stringMiddleware),
+        applyMiddleware(ReduxThunk, stringMiddleware),
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     )
     // compose( // комбинируем 2 функции (или усилителей стора)// ВАЖНО УЧИТЫВАТЬ ПОСЛЕДОВАТЕЛЬНОСТЬ
