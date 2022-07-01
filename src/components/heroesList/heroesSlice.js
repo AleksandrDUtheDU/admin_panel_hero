@@ -1,15 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
-
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     heroes: [],
-    heroesLoadingStatus: 'idle',
+    heroesLoadingStatus: 'idle'
 }
 
-const heroesSlise = createSlice({
+const heroesSlice = createSlice({
     name: 'heroes',
     initialState,
-    redecers: {
+    reducers: {
         heroesFetching: state => { state.heroesLoadingStatus = 'loading' },
         heroesFetched: (state, action) => {
             state.heroesLoadingStatus = 'idle';
@@ -27,7 +26,7 @@ const heroesSlise = createSlice({
     }
 });
 
-const { actions, reducer } = heroesSlise;
+const { actions, reducer } = heroesSlice;
 
 export default reducer;
 export const {

@@ -1,58 +1,39 @@
 import { useHttp } from '../../hooks/http.hook';
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect'
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { createSelector } from 'reselect';
 
-//import { fethHeroes, heroesFetching, heroesFetched, heroesFetchingError, heroDeleted } from '../../actions';
-import { fethHeroes } from '../../actions';
-import { heroDeleted, heroesFetching, heroesFetched, heroesFetchingError } from './heroesSlice';
-
+import { fetchHeroes } from '../../actions/index';
+import { heroDeleted } from './heroesSlice';
 
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
+import './heroesList.scss';
+
 const HeroesList = () => {
 
-    const filterHeroesSelector = createSelector(  // синтаксис createSelector он мемонизирует и не будет рендерить при тригере на изменеие стейта если сам стейт не изменился
-        (state) => state.filteres.activeFilter,
+    const filteredHeroesSelector = createSelector(
+        (state) => state.filters.activeFilter,
         (state) => state.heroes.heroes,
         (filter, heroes) => {
             if (filter === 'all') {
-                console.log('render'); // рендерит при изменении глобального стейта (не смотря на одинаковые значения)
                 return heroes;
             } else {
-                return heroes.filter(item => item.element === filter)
+                return heroes.filter(item => item.element === filter);
             }
         }
-    )
+    );
 
-    // const someState = useSelector(state => ({
-    //     activeFilter: state.filteres.activeFilter,
-    //     heroes: state.heroes.heroes,
-    // }))  // из за строго сравнения при сравнении объекта с объектом будет всегда не равен = как следствие перерендер во всех случаях
-
-    const filteredHeroes = useSelector(filterHeroesSelector);
-
-    // const filteredHeroes = useSelector(state => {
-    //     if (state.filteres.activeFilter === 'all') {
-    //         console.log('render'); // рендерит при изменении глобального стейта (не смотря на одинаковые значения)
-    //         return state.heroes.heroes;
-    //     } else {
-    //         return state.heroes.heroes.filter(item => item.element === state.filteres.activeFilter)
-    //     }
-    // })
-
+    const filteredHeroes = useSelector(filteredHeroesSelector);
     const heroesLoadingStatus = useSelector(state => state.heroes.heroesLoadingStatus);
     const dispatch = useDispatch();
     const { request } = useHttp();
 
     useEffect(() => {
-        //dispatch("HEROES_FETCHING"); // по умолчанию dispatch всегда принимает объект //
-        dispatch(heroesFetching());
-        //dispatch(fethHeroes(request)); // по умолчанию dispatch всегда принимает объект //
-        request("http://localhost:3001/heroes")
-            .then(data => dispatch(heroesFetched(data)))
-            .catch(() => dispatch(heroesFetchingError()))
+        dispatch(fetchHeroes(request));
+        // eslint-disable-next-line
     }, []);
 
     const onDelete = useCallback((id) => {
@@ -60,8 +41,8 @@ const HeroesList = () => {
             .then(data => console.log(data, 'Deleted'))
             .then(dispatch(heroDeleted(id)))
             .catch(err => console.log(err));
+        // eslint-disable-next-line  
     }, [request]);
-
 
     if (heroesLoadingStatus === "loading") {
         return <Spinner />;
@@ -70,24 +51,33 @@ const HeroesList = () => {
     }
 
     const renderHeroesList = (arr) => {
-        if (arr.lenght === 0) {
-            return <h5 className="text-center mt-5">Героев пока нет</h5>
+        if (arr.length === 0) {
+            return (
+                <CSSTransition
+                    timeout={0}
+                    classNames="hero">
+                    <h5 className="text-center mt-5">Героев пока нет</h5>
+                </CSSTransition>
+            )
         }
+
         return arr.map(({ id, ...props }) => {
-            return <HeroesListItem
-                key={id}
-                onDelete={() => onDelete(id)}
-                {...props}
-            />
+            return (
+                <CSSTransition
+                    key={id}
+                    timeout={500}
+                    classNames="hero">
+                    <HeroesListItem  {...props} onDelete={() => onDelete(id)} />
+                </CSSTransition>
+            )
         })
     }
 
     const elements = renderHeroesList(filteredHeroes);
-
     return (
-        <ul>
+        <TransitionGroup component="ul">
             {elements}
-        </ul>
+        </TransitionGroup>
     )
 }
 
