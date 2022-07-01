@@ -3,7 +3,11 @@ import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect'
 
-import { fethHeroes, heroesFetching, heroesFetched, heroesFetchingError, heroDeleted } from '../../actions';
+//import { fethHeroes, heroesFetching, heroesFetched, heroesFetchingError, heroDeleted } from '../../actions';
+import { fethHeroes } from '../../actions';
+import { heroDeleted, heroesFetching, heroesFetched, heroesFetchingError } from './heroesSlice';
+
+
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
@@ -44,11 +48,11 @@ const HeroesList = () => {
 
     useEffect(() => {
         //dispatch("HEROES_FETCHING"); // по умолчанию dispatch всегда принимает объект //
-        //dispatch(heroesFetching());
-        dispatch(fethHeroes(request)); // по умолчанию dispatch всегда принимает объект //
-        // request("http://localhost:3001/heroes")
-        //     .then(data => dispatch(heroesFetched(data)))
-        //     .catch(() => dispatch(heroesFetchingError()))
+        dispatch(heroesFetching());
+        //dispatch(fethHeroes(request)); // по умолчанию dispatch всегда принимает объект //
+        request("http://localhost:3001/heroes")
+            .then(data => dispatch(heroesFetched(data)))
+            .catch(() => dispatch(heroesFetchingError()))
     }, []);
 
     const onDelete = useCallback((id) => {
